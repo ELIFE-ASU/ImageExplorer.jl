@@ -1,5 +1,6 @@
 body div {
-    background: rgba(255, 138, 0, 0.2);
+    background: #484c57;
+    color: #babcc3;
     display: flex;
     justify-content: flex-start;
     flex-wrap: nowrap;
@@ -9,17 +10,33 @@ body div {
     width: 20%;
     min-width: 200px;
     display: block;
-    background: rgba(255, 138, 0, 0.5);
+    background: #0e111a;
     padding: 1em;
 }
 
 #sidebar h1 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 1em;
+    text-align: left;
+}
+
+#sidebar h2 {
     font-size: 1em;
     font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+#sidebar ul {
+    margin-bottom: 0.5em;
 }
 
 #sidebar ul li {
     padding-left: 1em;
+}
+
+#sidebar button {
+    margin-top: 2em;
 }
 
 #plots {
@@ -35,14 +52,12 @@ body div {
     font-size: 1em;
     font-weight: bold;
     text-align: center;
+    padding-top: 2em;
     padding-bottom: 2em;
 }
 
-img {
+#plots img {
     max-width: 600px;
     max-height: 600px;
-    padding: 1em;
-    margin: 1em;
-    border: 1px solid black;
-    border-radius: 10px;
+    margin: 0.5em;
 }
