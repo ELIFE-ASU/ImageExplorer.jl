@@ -1,4 +1,5 @@
 function findimages(dir=plotsdir(); recursive=false, exts=[".png", ".jpeg", ".jpg", ".svg"])
+    dir = abspath(dir)
     paths = if recursive
         paths = String[]
         for (root, dirs, files) in walkdir(dir)
