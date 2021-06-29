@@ -1,0 +1,10 @@
+name = "ImageExplorer"
+uuid = "71aea310-e050-45eb-9701-029d00155105"
+authors = ["Douglas G. Moore <doug@dglmoore.com>"]
+version = "0.1.0"
+
+[deps]
+Blink = "ad839575-38b3-5650-b840-f874b8c74a25"
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+DrWatson = "634d3b9d-ee7a-5ddf-bec9-22491ea816e1"
+Hyperscript = "47d2ed2b-36de-50cf-bf87-49c2cf4b8b91"

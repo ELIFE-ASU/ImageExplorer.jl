@@ -1,0 +1,48 @@
+body div {
+    background: rgba(255, 138, 0, 0.2);
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+}
+
+#sidebar {
+    width: 20%;
+    min-width: 200px;
+    display: block;
+    background: rgba(255, 138, 0, 0.5);
+    padding: 1em;
+}
+
+#sidebar h1 {
+    font-size: 1em;
+    font-weight: bold;
+}
+
+#sidebar ul li {
+    padding-left: 1em;
+}
+
+#plots {
+    width: 80%;
+    min-width: 640px;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+#plots h1 {
+    width: 100%;
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+    padding-bottom: 2em;
+}
+
+img {
+    max-width: 600px;
+    max-height: 600px;
+    padding: 1em;
+    margin: 1em;
+    border: 1px solid black;
+    border-radius: 10px;
+}
