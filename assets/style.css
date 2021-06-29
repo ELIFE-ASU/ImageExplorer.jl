@@ -57,7 +57,9 @@ body div {
 }
 
 #plots img {
+    min-width: 400px;
     max-width: 600px;
+    min-height: 400px;
     max-height: 600px;
     margin: 0.5em;
 }
