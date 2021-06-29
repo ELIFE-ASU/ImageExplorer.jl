@@ -32,9 +32,12 @@ function sidebar(values)
                       onclick="Blink.msg(\"press\", [\"$header\", \"$val\"]);"),
                     m("label", string(val); :for => "$(header)$i")))
         end
-        push!(sidebar, m("h1", header), m("ul", list...))
+        push!(sidebar, m("h2", header), m("ul", list...))
     end
-    m("div", id="sidebar", sidebar..., m("button", onclick="Blink.msg(\"reset\", [])", "Reset"))
+    m("div", id="sidebar",
+        m("h1", "Filters"),
+        sidebar...,
+        m("button", onclick="Blink.msg(\"reset\", [])", "Reset"))
 end
 
 function plots(data, visible)
