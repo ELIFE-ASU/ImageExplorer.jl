@@ -1,7 +1,7 @@
 name = "ImageExplorer"
 uuid = "71aea310-e050-45eb-9701-029d00155105"
 authors = ["Douglas G. Moore <doug@dglmoore.com>"]
-version = "0.1.0"
+version = "0.2.0"
 
 [deps]
 Blink = "ad839575-38b3-5650-b840-f874b8c74a25"
