@@ -12,13 +12,27 @@ function findimages(dir=plotsdir(); recursive=false, exts=[".png", ".jpeg", ".jp
     filter(file -> any(endswith.(file, exts)), paths)
 end
 
-function dataset(paths; forcepath=false)
-    params = map(x -> x[2], parse_savename.(paths))
+function dataset(paths; force=false)
+    props = parse_savename.(paths)
+    prefixes = map(x -> basename(x[1]), props)
+    params = map(x -> x[2], props)
+
     images = vcat(DataFrame.(params)..., cols=:union)
+
     if hasproperty(images, :path) && !force
-        error("image files have a param called path; consider passing forcepath=true")
+        error("image files have a parameter called path; consider passing force=true")
+    else
+        images.path = "file://" .* paths;
     end
-    images.path = "file://" .* paths;
+
+    if hasproperty(images, :dataset) && !force
+        error("image files have a parameter called dataset; consider passing force=true")
+    else
+        images.dataset = prefixes
+    end
+
+    display(images)
+
     images
 end
 
@@ -54,11 +68,11 @@ function render(win, data, visible)
     content!(win, "#plots", prod(string.(contents)))
 end
 
-function explore(dir=plotsdir(); title="ImageExplorer", forcepath=false, kwargs...)
-    data = dataset(findimages(dir; kwargs...); forcepath)
+function explore(dir=plotsdir(); title="ImageExplorer", force=false, kwargs...)
+    data = dataset(findimages(dir; kwargs...); force)
 
     cols = filter(!=("path"), names(data))
-    values = Dict(map(col -> col => sort(unique(data[:, col])), cols)...)
+    values = filter(!(isempty∘last), Dict(map(col -> col => sort(unique(data[:, col])), cols)...))
 
     visible = Dict()
 
