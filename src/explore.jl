@@ -31,8 +31,6 @@ function dataset(paths; force=false)
         images.dataset = prefixes
     end
 
-    display(images)
-
     images
 end
 
