@@ -31,6 +31,12 @@ function dataset(paths; force=false)
         images.dataset = prefixes
     end
 
+    if hasproperty(images, :id) && !force
+        error("image files have a parameter called id; consider passing force=true")
+    else
+        images.id = "image" .* string.(eachindex(images.path))
+    end
+
     images
 end
 
@@ -48,35 +54,39 @@ function sidebar(values)
         push!(sidebar, m("h2", header), m("ul", list...))
     end
     m("div", id="sidebar",
-        m("h1", "Filters"),
+        m("header", m("h1", "Filters")),
         sidebar...,
-        m("button", onclick="Blink.msg(\"reset\", [])", "Reset"))
+        m("button", id="reset", onclick="Blink.msg(\"reset\", [])", "Reset"))
 end
 
-function plots(data, visible)
-    paths = filter(data) do row
-        all(string(row[key]) in values for (key, values) in visible)
-    end.path
-
-    [m("h1", "Figures: $(length(paths))"); map(path -> m("img", src="$path"), paths)]
+function plots(df, visible)
+    combine(groupby(df, [:id, :path])) do group
+        (; visible = all(string(group[1,key]) in values for (key, values) in visible))
+    end
 end
 
-function render(win, data, visible)
-    contents = plots(data, visible)
-    content!(win, "#plots", prod(string.(contents)))
+function images(df)
+    map(eachrow(df)) do row
+        m("img", src=row.path, id=row.id, onload="setupImage('#$(row.id)');")
+    end
+end
+
+function toggle(win, df, visible)
+    df = plots(df, visible)
+    @js_ win toggle($(df.id), $(df.visible))
 end
 
 function explore(dir=plotsdir(); title="ImageExplorer", force=false, kwargs...)
     data = dataset(findimages(dir; kwargs...); force)
 
-    cols = filter(!=("path"), names(data))
+    cols = filter(x -> !(x in ["id", "path"]), names(data))
     values = filter(!(isempty∘last), Dict(map(col -> col => sort(unique(data[:, col])), cols)...))
 
     visible = Dict()
 
-    w = Window(Dict("title" => title, "webPreferences" => Dict("webSecurity" => false)))
+    win = Window(Dict("title" => title, "webPreferences" => Dict("webSecurity" => false)))
 
-    handle(w, "press") do (header, value)
+    handle(win, "press") do (header, value)
         if haskey(visible, header)
             if value in visible[header]
                 delete!(visible[header], value)
@@ -90,21 +100,41 @@ function explore(dir=plotsdir(); title="ImageExplorer", force=false, kwargs...)
             visible[header] = Set([value])
         end
 
-        render(w, data, visible)
+        toggle(win, data, visible)
     end
 
-    handle(w, "reset") do args...
+    handle(win, "reset") do args...
         visible = Dict()
-        js(w, Blink.JSString("d3.selectAll(\"input[type='checkbox']\").property('checked', false)"); callback=false)
-        render(w, data, visible)
+        @js_ win d3.selectAll("input[type='checkbox']").property("checked", false)
+        toggle(win, data, visible)
     end
 
-    loadcss!(w, "file://$(@__DIR__)/../assets/style.css")
-    loadjs!(w, "https://d3js.org/d3.v7.min.js")
-    body!(w, m("div",
-               sidebar(values),
-               m("div", id="plots", plots(data, visible))
-              ))
+    let loaded = []
+        handle(win, "loaded") do id
+            push!(loaded, id)
+            if isempty(setdiff(data.id, loaded))
+                @js_ win d3.selectAll("#overlay").classed("hidden", true)
+            end
+        end
+    end
+
+    loadcss!(win, "file://$(@__DIR__)/../assets/style.css")
+    loadjs!(win, "https://d3js.org/d3.v7.min.js")
+    loadjs!(win, "file://$(@__DIR__)/../assets/explore.js")
+
+    body!(win, m("div",
+                 m("div", id="overlay", class="flex",
+                   m("img", src="file://$(@__DIR__)/../assets/spinner.gif"),
+                   "Loading images..."),
+                 sidebar(values),
+                 m("div", id="content",
+                   m("header",
+                     m("h1", "$(nrow(data)) Images"),
+                     m("div",
+                       m("span", "Image Width:"),
+                       m("input", type="range", value=500, min=100, step=10, max=1000, name="width", onchange="resize();"),
+                       m("label", "500px"; :for => "width"))),
+                   m("div", id="plots", images(data)))))
 
     nothing
 end

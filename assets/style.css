@@ -1,5 +1,4 @@
 body div {
-    background: #484c57;
     color: #babcc3;
     display: flex;
     justify-content: flex-start;
@@ -14,14 +13,14 @@ body div {
     padding: 1em;
 }
 
-#sidebar h1 {
+#sidebar header h1 {
     font-size: 1.5em;
     font-weight: bold;
     margin-bottom: 1em;
     text-align: left;
 }
 
-#sidebar h2 {
+#sidebar header h2 {
     font-size: 1em;
     font-weight: bold;
     margin-bottom: 0.5em;
@@ -39,27 +38,95 @@ body div {
     margin-top: 2em;
 }
 
-#plots {
+#content {
+    background: #484c57;
     width: 80%;
-    min-width: 640px;
-    display: flex;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
+    min-width: 500px;
+    display: block;
 }
 
-#plots h1 {
+#content header {
+    padding-bottom: 2em;
+}
+
+#content header h1 {
     width: 100%;
     font-size: 1em;
     font-weight: bold;
     text-align: center;
     padding-top: 2em;
-    padding-bottom: 2em;
+    padding-bottom: 1em;
+}
+
+#content header div {
+    width: 100%;
+    justify-content: center;
+}
+
+#content header div span {
+    font-size: 1em;
+    padding-right: 1em;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#content header div input {
+    width: 200px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#content header div label {
+    font-size: 1em;
+    vertical-align: middle;
+    padding-left: 1em;
+    display: inline-block;
+}
+
+#plots {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
 }
 
 #plots img {
-    min-width: 400px;
-    max-width: 600px;
-    min-height: 400px;
-    max-height: 600px;
     margin: 0.5em;
+}
+
+.block {
+    display: block;
+}
+
+.flex {
+    display: flex;
+}
+
+.hidden {
+    display: none;
+}
+
+#overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #484c57;
+    z-index: 2;
+    margin: auto;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+#overlay img {
+    display: inline;
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+    margin-right: 1em;
 }
