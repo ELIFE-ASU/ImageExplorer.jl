@@ -1,3 +1,5 @@
+@tags button div h1 h2 header img input label li span ul
+
 function findimages(dir=plotsdir(); recursive=false, exts=[".png", ".jpeg", ".jpg", ".svg"])
     dir = abspath(dir)
     paths = if recursive
@@ -46,17 +48,16 @@ function sidebar(values)
         list = []
         for (i, val) in enumerate(vals)
             push!(list,
-                  m("li",
-                    m("input", type="checkbox", name="$(header)$i", value=string(val),
-                      onclick="Blink.msg(\"press\", [\"$header\", \"$val\"]);"),
-                    m("label", string(val); :for => "$(header)$i")))
+                  li(input(type="checkbox", name="$(header)$i", value=string(val),
+                           onclick="""Blink.msg("press", ["$header", "$val"]);"""),
+                     label(string(val); :for => "$(header)$i")))
         end
-        push!(sidebar, m("h2", header), m("ul", list...))
+        push!(sidebar, h2(header), ul(list...))
     end
-    m("div", id="sidebar",
-        m("header", m("h1", "Filters")),
+    div(id="sidebar",
+        header(h1("Filters")),
         sidebar...,
-        m("button", id="reset", onclick="Blink.msg(\"reset\", [])", "Reset"))
+        button(id="reset", onclick="""Blink.msg("reset", []);""", "Reset"))
 end
 
 function plots(df, visible)
@@ -67,7 +68,7 @@ end
 
 function images(df)
     map(eachrow(df)) do row
-        m("img", src=row.path, id=row.id, onload="setupImage('#$(row.id)');")
+        img(src=row.path, id=row.id, onload="setupImage('#$(row.id)');")
     end
 end
 
@@ -122,19 +123,16 @@ function explore(dir=plotsdir(); title="ImageExplorer", force=false, kwargs...)
     loadjs!(win, "https://d3js.org/d3.v7.min.js")
     loadjs!(win, "file://$(@__DIR__)/../assets/explore.js")
 
-    body!(win, m("div",
-                 m("div", id="overlay", class="flex",
-                   m("img", src="file://$(@__DIR__)/../assets/spinner.gif"),
-                   "Loading images..."),
-                 sidebar(values),
-                 m("div", id="content",
-                   m("header",
-                     m("h1", "$(nrow(data)) Images"),
-                     m("div",
-                       m("span", "Image Width:"),
-                       m("input", type="range", value=500, min=100, step=10, max=1000, name="width", onchange="resize();"),
-                       m("label", "500px"; :for => "width"))),
-                   m("div", id="plots", images(data)))))
+    body!(win, div(div(id="overlay", class="flex",
+                       img(src="file://$(@__DIR__)/../assets/spinner.gif"),
+                       "Loading images..."),
+                   sidebar(values),
+                   div(id="content",
+                       header(h1("$(nrow(data)) Images"),
+                              div(span("Image Width:"),
+                                  input(type="range", value=500, min=100, step=10, max=1000, name="width", onchange="resize();"),
+                                  label("500px"; :for => "width"))),
+                       div(id="plots", images(data)))))
 
     nothing
 end
