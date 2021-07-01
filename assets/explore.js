@@ -12,7 +12,7 @@ async function resizeThis() {
 }
 
 async function setupImage(selector) {
-    resizeThat(selector);
+    await resizeThat(selector);
     Blink.msg('loaded', d3.select(selector).attr('id'));
 }
 
