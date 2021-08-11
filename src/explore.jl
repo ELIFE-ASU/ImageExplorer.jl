@@ -68,7 +68,7 @@ end
 
 function images(df)
     map(eachrow(df)) do row
-        img(src=row.path, id=row.id, loading="lazy", onload="setupImage('#$(row.id)');")
+        img(src=row.path, id=row.id, title=row.path, loading="lazy", onload="setupImage('#$(row.id)');")
     end
 end
 
