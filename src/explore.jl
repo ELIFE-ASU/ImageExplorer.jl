@@ -81,7 +81,9 @@ function explore(dir=plotsdir(); title="ImageExplorer", force=false, kwargs...)
     data = dataset(findimages(dir; kwargs...); force)
 
     cols = filter(x -> !(x in ["id", "path"]), names(data))
-    values = filter(!(isempty∘last), Dict(map(col -> col => sort(unique(data[:, col])), cols)...))
+    values = filter(Dict(map(col -> col => sort(unique(data[:, col])), cols)...)) do x
+        length(last(x)) > 1
+    end
 
     visible = Dict()
 
